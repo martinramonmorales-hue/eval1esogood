@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Inicial - Tecnología y Digitalización 1º ESO</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #475569;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --accent: #6366f1;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Headers & Branding */
+        .app-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .badge-teacher {
+            background: #eff6ff;
+            color: var(--primary-dark);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Question Navigation & Map */
+        .quiz-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            margin-bottom: 25px;
+        }
+
+        .q-map-btn {
+            padding: 6px 0;
+            font-size: 0.85rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .q-map-btn.active {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+            color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+        }
+
+        .q-map-btn.answered {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            border-color: #cbd5e1;
+        }
+
+        /* Question Content */
+        .question-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .question-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: #e0e7ff;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0 20px 0;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .svg-container svg {
+            max-width: 100%;
+            height: auto;
+            max-height: 220px;
+        }
+
+        /* Input Types Styling */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        @media (max-width: 640px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reorder-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reorder-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .reorder-item select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        /* Controls Bottom Bar */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Results & Report */
+        .results-summary {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .score-big {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .competency-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .competency-table th, .competency-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .competency-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .review-section {
+            margin-top: 30px;
+        }
+
+        .review-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+            background: #ffffff;
+        }
+
+        .review-card.correct {
+            border-left: 5px solid var(--success);
+        }
+
+        .review-card.incorrect {
+            border-left: 5px solid var(--danger);
+        }
+
+        .review-status {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .review-card.correct .review-status {
+            color: var(--success);
+        }
+
+        .review-card.incorrect .review-status {
+            color: var(--danger);
+        }
+
+        .explanation {
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .student-info-print {
+            display: none;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #000;
+            border-radius: 6px;
+        }
+
+        /* PRINT STYLES - REQUIRED IMPRESCINDIBLE */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+            }
+
+            .container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .no-print, 
+            .app-header, 
+            #registration-screen, 
+            .quiz-top-bar, 
+            .progress-bar-container, 
+            .question-map, 
+            #question-container, 
+            .nav-controls, 
+            .action-buttons-results {
+                display: none !important;
+            }
+
+            .screen {
+                display: block !important;
+            }
+
+            .student-info-print {
+                display: block !important;
+            }
+
+            .results-summary {
+                border: 1px solid #000 !important;
+                background: #fff !important;
+                page-break-inside: avoid;
+            }
+
+            .competency-table {
+                border: 1px solid #000 !important;
+            }
+
+            .competency-table th, .competency-table td {
+                border: 1px solid #000 !important;
+            }
+
+            .review-card {
+                border: 1px solid #666 !important;
+                page-break-inside: avoid;
+                margin-bottom: 12px !important;
+                background: #fff !important;
+            }
+
+            .review-card.correct {
+                border-left: 6px solid #10b981 !important;
+            }
+
+            .review-card.incorrect {
+                border-left: 6px solid #ef4444 !important;
+            }
+
+            .explanation {
+                background: #f5f5f5 !important;
+                color: #000 !important;
+                border: 1px solid #ddd !important;
+            }
+
+            .score-big {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Application Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <h1>Tecnología y Digitalización 1.º ESO</h1>
+            <p>Evaluación Inicial de Diagnóstico (Decreto 235/2022 CARM - LOMLOE)</p>
+        </div>
+        <div class="badge-teacher">
+            Prof: Martín Ramón Morales Fuentes
+        </div>
+    </header>
+
+    <!-- 1. REGISTRATION SCREEN -->
+    <section idregistration-screen" class="screen active">
+        <div style="margin-bottom: 20px;">
+            <h2>Registro de Alumno/a</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Por favor, completa tus datos personales para acceder a la evaluación inicial. La prueba consta de 40 preguntas cortas adaptadas para 35-40 minutos.
+            </p>
+        </div>
+        <form id="student-form" onsubmit="startQuiz(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="student-name">Nombre *</label>
+                    <input type="text" id="student-name" class="form-control" placeholder="Ej. María" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-surname">Apellidos *</label>
+                    <input type="text" id="student-surname" class="form-control" placeholder="Ej. García López" required>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="student-email">Correo Electrónico *</label>
+                    <input type="email" id="student-email" class="form-control" placeholder="alumno@educarm.es" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-group">Grupo / Clase *</label>
+                    <select id="student-group" class="form-control" required>
+                        <option value="">Selecciona tu grupo...</option>
+                        <option value="1º ESO A">1º ESO A</option>
+                        <option value="1º ESO B">1º ESO B</option>
+                        <option value="1º ESO C">1º ESO C</option>
+                        <option value="1º ESO D">1º ESO D</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Comenzar Evaluación Inicial
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- 2. QUIZ SCREEN -->
+    <section id="quiz-screen" class="screen">
+        <div class="quiz-top-bar">
+            <span id="display-student-name">Alumno/a</span>
+            <span>Pregunta <span id="current-q-num">1</span> de 40</span>
+        </div>
+
+        <div class="progress-bar-container">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </div>
+
+        <!-- Question Map Grid -->
+        <div id="question-map" class="question-map"></div>
+
+        <!-- Active Question Container -->
+        <div id="question-card" class="question-card">
+            <!-- Dynamic Content via JS -->
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-controls">
+            <button id="btn-prev" class="btn btn-secondary" onclick="navigateQuestion(-1)">Anterior</button>
+            <button id="btn-next" class="btn btn-primary" onclick="navigateQuestion(1)">Siguiente</button>
+            <!-- CRITICAL REQ: Submit button ONLY appears on question 40 -->
+            <button id="btn-submit" class="btn btn-success" style="display: none;" onclick="submitQuiz()">Entregar y Finalizar Evaluación</button>
+        </div>
+    </section>
+
+    <!-- 3. RESULTS & REVIEW SCREEN -->
+    <section id="results-screen" class="screen">
+        <!-- Printable Student Info Header -->
+        <div class="student-info-print">
+            <h3>Informe de Evaluación Oficial - Tecnología y Digitalización 1.º ESO</h3>
+            <p><strong>Alumno/a:</strong> <span id="print-student-name"></span></p>
+            <p><strong>Email:</strong> <span id="print-student-email"></span> | <strong>Grupo:</strong> <span id="print-student-group"></span></p>
+            <p><strong>Fecha de Realización:</strong> <span id="print-date"></span></p>
+            <p><strong>Profesor Responsable:</strong> Prof: Martín Ramón Morales Fuentes</p>
+        </div>
+
+        <div class="results-summary">
+            <h2>Resultados de la Evaluación Inicial</h2>
+            <div id="final-score" class="score-big">0.0 / 10</div>
+            <p id="score-feedback" style="font-weight: 600; color: var(--secondary);"></p>
+
+            <h3 style="margin-top: 25px; font-size: 1.1rem; text-align: left;">Desglose por Competencias Específicas (LOMLOE):</h3>
+            <table class="competency-table">
+                <thead>
+                    <tr>
+                        <th>Competencia Clave / Específica</th>
+                        <th>Bloques Asociados</th>
+                        <th>Nivel Alcanzado</th>
+                    </tr>
+                </thead>
+                <tbody id="competency-tbody">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+
+            <div class="action-buttons-results no-print" style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+                <button class="btn btn-secondary" onclick="scrollToReview()">🔍 Revisar Respuestas Detalladas</button>
+            </div>
+        </div>
+
+        <!-- Detailed Question Review Section -->
+        <div id="review-section" class="review-section">
+            <h3 style="margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
+                Revisión Detallada de Preguntas (1 a 40)
+            </h3>
+            <div id="review-container">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+// --- QUESTION DATABASE (40 Questions aligned with CARM Decreto 235/2022) ---
+const questionsData = [
+    // BLOQUE A: Proceso de Resolución de Problemas (1-8)
+    {
+        id: 1,
+        block: "Bloque A: Proceso Tecnológico",
+        competency: "STEM / CE",
+        type: "single",
+        title: "¿Cuál es el orden cronológico correcto de las fases iniciales del proceso tecnológico?",
+        svg: `<svg viewBox="0 0 400 100" width="100%">
+            <rect x="10" y="30" width="110" height="40" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+            <text x="65" y="55" font-size="12" text-anchor="middle" font-weight="bold" fill="#1e40af">1. Necesidad</text>
+            <path d="M 120 50 L 140 50" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+            <rect x="145" y="30" width="110" height="40" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+            <text x="200" y="55" font-size="12" text-anchor="middle" font-weight="bold" fill="#1e40af">2. Idea / Diseño</text>
+            <path d="M 255 50 L 275 50" stroke="#2563eb" stroke-width="2"/>
+            <rect x="280" y="30" width="110" height="40" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+            <text x="335" y="55" font-size="12" text-anchor="middle" font-weight="bold" fill="#1e40af">3. Planificación</text>
+        </svg>`,
+        options: [
+            "Construcción → Búsqueda de información → Evaluación → Diseño",
+            "Identificación del problema → Búsqueda de información → Diseño → Planificación",
+            "Evaluación → Planificación → Identificación del problema → Construcción",
+            "Diseño → Construcción → Identificación del problema → Evaluación"
+        ],
+        correct: 1,
+        explanation: "El método de proyectos arranca siempre identificando la necesidad o problema, buscando información previa, diseñando soluciones y planificando la construcción."
+    },
+    {
+        id: 2,
+        block: "Bloque A: Proceso Tecnológico",
+        competency: "CPSAA / CE",
+        type: "reorder",
+        title: "Ordena los pasos para construir un objeto de madera en el aula-taller:",
+        items: [
+            "Medir y trazar la pieza sobre la tabla",
+            "Sujetar la tabla firmemente en el tornillo de banco",
+            "Cortar con la sierra de marquetería o serrucho",
+            "Lijar los bordes para eliminar rebabas y suavizar"
+        ],
+        correctOrder: [0, 1, 2, 3],
+        explanation: "En el taller el procedimiento seguro requiere primero medir y trazar, luego fijar el material en el tornillo de banco, cortar con seguridad y finalmente pulir/lijar."
+    },
+    {
+        id: 3,
+        block: "Bloque A: Seguridad e Higiene",
+        competency: "CPSAA",
+        type: "single",
+        title: "¿Qué significa la siguiente señal de seguridad normalizada presente en el aula-taller de Tecnología?",
+        svg: `<svg viewBox="0 0 120 120" width="120">
+            <circle cx="60" cy="60" r="50" fill="#0284c7"/>
+            <path d="M 35 50 C 35 35, 85 35, 85 50 C 85 65, 85 75, 75 80 C 65 85, 55 85, 45 80 Z" fill="none" stroke="#ffffff" stroke-width="5"/>
+            <circle cx="48" cy="55" r="6" fill="#ffffff"/>
+            <circle cx="72" cy="55" r="6" fill="#ffffff"/>
+        </svg>`,
+        options: [
+            "Peligro de radiación en el taller",
+            "Uso obligatorio de gafas de protección homologadas",
+            "Prohibido mirar al profesor durante el mecanizado",
+            "Zona de almacenamiento de productos tóxicos"
+        ],
+        correct: 1,
+        explanation: "Las señales circulares con fondo azul indican la obligación de utilizar Equipos de Protección Individual (EPIs), en este caso gafas de seguridad."
+    },
+    {
+        id: 4,
+        block: "Bloque A: Trabajo en Taller",
+        competency: "STEM",
+        type: "matching",
+        title: "Relaciona cada herramienta del aula-taller con su función principal:",
+        pairs: [
+            { left: "Tornillo de banco", right: "Sujeción firme de piezas" },
+            { left: "Barrena", right: "Perforación manual en madera" },
+            { left: "Alicates universales", right: "Corte y sujeción de alambres" },
+            { left: "Lija de grano fino", right: "Acabado y pulido de superficies" }
+        ],
+        explanation: "Cada herramienta de taller está diseñada para un operador mecánico específico: sujeción, taladrado, manipulación de alambre o pulido."
+    },
+    {
+        id: 5,
+        block: "Bloque A: Fabricación Digital",
+        competency: "CD / STEM",
+        type: "single",
+        title: "¿Qué termoplástico de origen biodegradable (derivado del maíz o caña de azúcar) se utiliza de forma habitual en la impresión 3D FDM escolar?",
+        options: [
+            "PVC (Policloruro de vinilo)",
+            "PLA (Ácido Poliláctico)",
+            "Poliuretano expansivo",
+            "Teflón de alta densidad"
+        ],
+        correct: 1,
+        explanation: "El PLA (Ácido Poliláctico) es el filamento estándar en impresión 3D escolar por ser no tóxico, biodegradable y fácil de imprimir a unos 200 °C."
+    },
+    {
+        id: 6,
+        block: "Bloque A: Proceso Tecnológico",
+        competency: "STEM",
+        type: "text",
+        title: "Si un boceto de un soporte mide 150 milímetros de largo, ¿cuántos centímetros (cm) equivale esa medida?",
+        correctText: "15",
+        explanation: "Para pasar de milímetros a centímetros dividimos entre 10: $150 \\text{ mm} \\div 10 = 15 \\text{ cm}$."
+    },
+    {
+        id: 7,
+        block: "Bloque A: Trabajo en Taller",
+        competency: "CPSAA / CE",
+        type: "single",
+        title: "En la organización de un equipo de trabajo cooperativo en el taller, ¿cuál es el cometido del Encargado de Herramientas?",
+        options: [
+            "Escribir la memoria técnica del proyecto",
+            "Supervisar el orden, inventario y devolución de herramientas al panel",
+            "Comprar las materias primas fuera del instituto",
+            "Lavar la ropa de trabajo de todos los compañeros"
+        ],
+        correct: 1,
+        explanation: "El encargado de herramientas revisa que el panel esté completo al iniciar y finalizar la sesión de taller y comunica desperfectos al docente."
+    },
+    {
+        id: 8,
+        block: "Bloque A: Safety & Workshop (CLIL)",
+        competency: "CCL / STEM",
+        type: "single",
+        title: "[CLIL] Which safety rule is mandatory when operating rotating power tools or cutting machinery in the workshop?",
+        options: [
+            "Wear long loose necklaces and unbuttoned sleeves",
+            "Tie back long hair and remove loose clothing or jewelry",
+            "Use headphones with loud music while cutting",
+            "Turn off all lights in the workshop area"
+        ],
+        correct: 1,
+        explanation: "Tying back long hair and removing loose clothes prevents accidental entanglement in rotating parts of machinery."
+    },
+
+    // BLOQUE B: Comunicación y Difusión de Ideas (9-16)
+    {
+        id: 9,
+        block: "Bloque B: Representación Gráfica",
+        competency: "STEM / CCEC",
+        type: "single",
+        title: "¿Cómo se denomina la vista de un objeto obtenida al observarlo directamente desde arriba?",
+        svg: `<svg viewBox="0 0 200 120" width="180">
+            <rect x="20" y="20" width="60" height="80" fill="#cbd5e1" stroke="#0f172a" stroke-width="2"/>
+            <text x="50" y="65" font-size="11" font-weight="bold" text-anchor="middle">Alzado</text>
+            <rect x="100" y="20" width="60" height="35" fill="#93c5fd" stroke="#0f172a" stroke-width="2"/>
+            <text x="130" y="42" font-size="11" font-weight="bold" text-anchor="middle">Planta</text>
+        </svg>`,
+        options: [
+            "Alzado principal",
+            "Perfil izquierdo",
+            "Planta",
+            "Perspectiva cónica"
+        ],
+        correct: 2,
+        explanation: "En el sistema diédrico de ortogonalidad, la Planta representa la proyección ortogonal del objeto vista desde arriba."
+    },
+    {
+        id: 10,
+        block: "Bloque B: Representación Gráfica",
+        competency: "STEM",
+        type: "matching",
+        title: "Relaciona los tipos de representación gráfica con sus características clave:",
+        pairs: [
+            { left: "Boceto", right: "Dibujo rápido a mano alzada sin cotas" },
+            { left: "Croquis", right: "Dibujo acotado y proporcionado a mano alzada" },
+            { left: "Plano delineado", right: "Dibujo técnico exacto realizado con regla/CAD" },
+            { left: "Acotación", right: "Indicación numérica de dimensiones reales" }
+        ],
+        explanation: "El boceto expresa la primera idea informal; el croquis aporta proporciones y medidas (cotas); el plano delineado es la representación técnica formal."
+    },
+    {
+        id: 11,
+        block: "Bloque B: Escalas",
+        competency: "STEM",
+        type: "single",
+        title: "Si dibujamos una pieza de 10 cm con una escala E = 1:2, ¿cuánto medirá el dibujo en el papel?",
+        options: [
+            "20 cm (Ampliación)",
+            "5 cm (Reducción)",
+            "10 cm (Escala natural)",
+            "50 cm (Escala tipográfica)"
+        ],
+        correct: 1,
+        explanation: "Una escala 1:2 es de reducción a la mitad. Medida en papel = $10 \\text{ cm} \\div 2 = 5 \\text{ cm}$."
+    },
+    {
+        id: 12,
+        block: "Bloque B: Herramientas de Presentación",
+        competency: "CD / CCL",
+        type: "reorder",
+        title: "Ordena los pasos para elaborar una presentación digital efectiva para exponer un proyecto:",
+        items: [
+            "Estructurar el guion con introducción, desarrollo y conclusión",
+            "Seleccionar una plantilla limpia y legible con alto contraste",
+            "Insertar texto sintetizado en viñetas e imágenes del prototipo",
+            "Ensayar la exposición oral ajustando el tiempo disponible"
+        ],
+        correctOrder: [0, 1, 2, 3],
+        explanation: "Una buena comunicación técnica requiere planificar el esquema antes de diseñar diapositivas y ensayar la presentación oral."
+    },
+    {
+        id: 13,
+        block: "Bloque B: Representación Gráfica",
+        competency: "STEM",
+        type: "single",
+        title: "¿Qué elemento de la acotación señala los límites de la medida que se está indicando en un plano?",
+        svg: `<svg viewBox="0 0 220 80" width="200">
+            <line x1="30" y1="20" x2="30" y2="65" stroke="#000" stroke-width="1.5"/>
+            <line x1="170" y1="20" x2="170" y2="65" stroke="#000" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="170" y2="40" stroke="#2563eb" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <text x="100" y="35" font-size="12" text-anchor="middle" font-weight="bold" fill="#2563eb">50 mm</text>
+        </svg>`,
+        options: [
+            "Línea de cota y líneas auxiliares de cota",
+            "Eje de simetría discontinuo",
+            "Símbolo de rugosidad superficial",
+            "Flecha de sección de corte"
+        ],
+        correct: 0,
+        explanation: "La acotación técnica normalizada utiliza la línea de cota (con flechas) y las líneas auxiliares paralelas para delimitar magnitudes."
+    },
+    {
+        id: 14,
+        block: "Bloque B: Vocabulario Técnico",
+        competency: "CCL",
+        type: "text",
+        title: "Escribe la palabra clave: ¿Cómo se llama el dibujo preliminary realizado a mano alzada sin usar regla ni compás?",
+        correctText: "boceto",
+        explanation: "El boceto es la expresión gráfica inicial y libre de una idea tecnológica a mano alzada."
+    },
+    {
+        id: 15,
+        block: "Bloque B: Diseño Asistido por Ordenador",
+        competency: "CD / STEM",
+        type: "single",
+        title: "En aplicaciones CAD 3D como Tinkercad, ¿qué operación geométrica se realiza para crear un orificio o vaciado en un prisma sólido?",
+        options: [
+            "Agrupar el objeto sólido con una forma configurada como 'Hueco'",
+            "Pintar la superficie con color transparente",
+            "Aumentar el brillo del renderizado 3D",
+            "Exportar la pieza directamente a formato MP3"
+        ],
+        correct: 0,
+        explanation: "En Tinkercad, al combinar (agrupar) una forma sólida con una forma definida como 'Hueco', se sustrae el volumen generando la perforación."
+    },
+    {
+        id: 16,
+        block: "Bloque B: Technical Drawing (CLIL)",
+        competency: "CCL / CCEC",
+        type: "single",
+        title: "[CLIL] What are the three standard main views in orthographic projection?",
+        options: [
+            "Front view, Top view, and Side view",
+            "Color, Texture, and Weight",
+            "Length, Angle, and Speed",
+            "Shadow, Light, and Contrast"
+        ],
+        correct: 0,
+        explanation: "Orthographic projection uses the Front view (Alzado), Top view (Planta), and Side view (Perfil)."
+    },
+
+    // BLOQUE C: Pensamiento Computacional, Programación y Robótica (17-24)
+    {
+        id: 17,
+        block: "Bloque C: Pensamiento Computacional",
+        competency: "CD / STEM",
+        type: "single",
+        title: "En un diagrama de flujo (flowchart), ¿qué forma geométrica representa una toma de decisión condicional (ej. ¿Es temperatura > 25º?)?",
+        svg: `<svg viewBox="0 0 260 90" width="220">
+            <rect x="10" y="25" width="70" height="40" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+            <text x="45" y="48" font-size="10" text-anchor="middle">Proceso</text>
+            <polygon points="170,15 210,45 170,75 130,45" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+            <text x="170" y="48" font-size="10" text-anchor="middle" font-weight="bold">¿Decisión?</text>
+        </svg>`,
+        options: [
+            "Un rectángulo de bordes rectos",
+            "Un rombo",
+            "Un círculo cerrado",
+            "Una flecha curva"
+        ],
+        correct: 1,
+        explanation: "El rombo simboliza las bifurcaciones y decisiones en algoritmia con respuestas del tipo Sí/No o Verdadero/Falso."
+    },
+    {
+        id: 18,
+        block: "Bloque C: Robótica y Control",
+        competency: "STEM / CD",
+        type: "matching",
+        title: "Clasifica los siguientes componentes de un sistema robótico según sean Entradas (Sensores) o Salidas (Actuadores):",
+        pairs: [
+            { left: "Sensor de luz LDR", right: "Entrada (Captura nivel de luminosidad)" },
+            { left: "Zumbador piezoeléctrico", right: "Salida (Emite tonos acústicos)" },
+            { left: "Pulsador táctil", right: "Entrada (Detecta pulsación)" },
+            { left: "Servomotor", right: "Salida (Genera movimiento angular)" }
+        ],
+        explanation: "Los sensores leen datos del entorno (Entradas); los actuadores ejecutan acciones físicas o señales en respuesta (Salidas)."
+    },
+    {
+        id: 19,
+        block: "Bloque C: Programación por Bloques",
+        competency: "CD / STEM",
+        type: "reorder",
+        title: "Ordena los pasos lógicos para programar un sistema de encendido automático de farola nocturna:",
+        items: [
+            "Leer el valor analógico del sensor de luz (LDR)",
+            "Comprobar si el valor de luz es menor que el umbral de oscuridad",
+            "Si se cumple: Activar el pin del LED (encender)",
+            "Si no se cumple: Apagar el pin del LED"
+        ],
+        correctOrder: [0, 1, 2, 3],
+        explanation: "Sigue el esquema algorítmico clásico: Toma de datos → Evaluación de condición → Ejecución de acción según respuesta."
+    },
+    {
+        id: 20,
+        block: "Bloque C: Programación",
+        competency: "CD",
+        type: "single",
+        title: "En entornos como Scratch o MakeCode, ¿para qué sirve una estructura de control de tipo 'Bucle por siempre' (Forever)?",
+        options: [
+            "Para ejecutar el código una sola vez al encender y luego borrarlo",
+            "Para repetir indefinidamente el bloque de instrucciones contenido en su interior",
+            "Para apagar la tarjeta controladora inmediatamente",
+            "Para cambiar el idioma del ordenador a inglés"
+        ],
+        correct: 1,
+        explanation: "El bucle infinito permite que el microcontrolador esté continuamente muestreando sensores y ejecutando el programa de control sin detenerse."
+    },
+    {
+        id: 21,
+        block: "Bloque C: Robótica",
+        competency: "CD / STEM",
+        type: "single",
+        title: "La tarjeta Micro:bit incluye integrada en su placa una matriz de luces. ¿De qué tipo de componentes se trata?",
+        options: [
+            "25 LEDs programables individuales (5x5)",
+            "4 motores de corriente continua",
+            "Un altavoz de gran potencia de 100W",
+            "Un panel solar fotovoltaico"
+        ],
+        correct: 0,
+        explanation: "La tarjeta BBC Micro:bit posee en su frontal una matriz de 5x5 LEDs rojos para mostrar iconos, texto e información visual."
+    },
+    {
+        id: 22,
+        block: "Bloque C: Algoritmia",
+        competency: "CD",
+        type: "text",
+        title: "Escribe el concepto: ¿Cómo se llama el conjunto ordenado y finito de instrucciones bien definidas para resolver un problema?",
+        correctText: "algoritmo",
+        explanation: "Un algoritmo es la secuencia de pasos lógicos e instrucciones precisas necesarias para llevar a cabo una tarea o resolver un problema."
+    },
+    {
+        id: 23,
+        block: "Bloque C: Sistemas de Control",
+        competency: "STEM / CD",
+        type: "single",
+        title: "Al conectar un diodo LED a un pin de salida digital de una tarjeta controladora, ¿qué componente es indispensable colocar en serie para no quemar el LED?",
+        svg: `<svg viewBox="0 0 200 80" width="180">
+            <line x1="20" y1="40" x2="60" y2="40" stroke="#000" stroke-width="2"/>
+            <rect x="60" y="28" width="50" height="24" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+            <line x1="110" y1="40" x2="140" y2="40" stroke="#000" stroke-width="2"/>
+            <polygon points="140,25 140,55 165,40" fill="#ef4444"/>
+            <line x1="165" y1="25" x2="165" y2="55" stroke="#ef4444" stroke-width="2"/>
+            <line x1="165" y1="40" x2="190" y2="40" stroke="#000" stroke-width="2"/>
+            <text x="85" y="20" font-size="10" text-anchor="middle" font-weight="bold">Resistencia</text>
+            <text x="152" y="20" font-size="10" text-anchor="middle" font-weight="bold">LED</text>
+        </svg>`,
+        options: [
+            "Una resistencia eléctrica protectora",
+            "Un segundo interruptor principal",
+            "Un transformador de alta tensión",
+            "Un fusible de 100 Amperios"
+        ],
+        correct: 0,
+        explanation: "La resistencia limita el paso de corriente (intensidad) protegiendo el LED de sobretensiones que destruirian el semiconductor."
+    },
+    {
+        id: 24,
+        block: "Bloque C: Programming & Robotics (CLIL)",
+        competency: "CD / STEM",
+        type: "single",
+        title: "[CLIL] Which of the following is considered an INPUT sensor in educational robotics?",
+        options: [
+            "Temperature sensor",
+            "Buzzer speaker",
+            "Electric DC Motor",
+            "LED indicator light"
+        ],
+        correct: 0,
+        explanation: "A temperature sensor detects external physical signals and sends data into the board (Input)."
+    },
+
+    // BLOQUE D: Digitalización del Entorno Personal de Aprendizaje (25-32)
+    {
+        id: 25,
+        block: "Bloque D: Hardware y Software",
+        competency: "CD",
+        type: "single",
+        title: "¿Qué elemento de un equipo informático forma parte del SOFTWARE?",
+        options: [
+            "La memoria RAM física",
+            "El procesador (CPU) y el ventilador",
+            "El sistema operativo (Linux/Windows) y las aplicaciones",
+            "El monitor táctil y el teclado USB"
+        ],
+        correct: 2,
+        explanation: "El software engloba la parte lógica, programas, algoritmos e instrucciones no tangibles del sistema computacional."
+    },
+    {
+        id: 26,
+        block: "Bloque D: Componentes Hardware",
+        competency: "CD",
+        type: "matching",
+        title: "Relaciona cada componente hardware con su función correspondiente:",
+        pairs: [
+            { left: "Procesador (CPU)", right: "Ejecuta las instrucciones y procesa datos (cerebro)" },
+            { left: "Memoria RAM", right: "Almacenamiento temporal de alta velocidad de trabajo" },
+            { left: "Disco Duro / SSD", right: "Almacenamiento permanente de archivos y programas" },
+            { left: "Teclado / Ratón", right: "Periféricos de entrada de datos" }
+        ],
+        explanation: "Diferenciación esencial en la arquitectura de ordenadores entre unidad de proceso, memoria volátil, almacenamiento masivo e interfaces."
+    },
+    {
+        id: 27,
+        block: "Bloque D: Identidad y Etiqueta Digital",
+        competency: "CD / CPSAA",
+        type: "single",
+        title: "¿Qué pauta de conducta es propia de la 'Netiqueta' en foros y aulas virtuales escolares?",
+        options: [
+            "Escribir todo el mensaje EN MAYÚSCULAS para que se lea mejor",
+            "Mantener un tono respetuoso, constructivo y evitar la redacción en mayúsculas sostenidas",
+            "Compartir contraseñas personales con los compañeros de clase",
+            "Publicar fotos de otros alumnos sin su consentimiento"
+        ],
+        correct: 1,
+        explanation: "En la netiqueta, escribir en mayúsculas equivale a gritar. Debe emplearse un lenguaje cortés y respetuoso con la privacidad."
+    },
+    {
+        id: 28,
+        block: "Bloque D: Gestión de la Información",
+        competency: "CD / CCL",
+        type: "reorder",
+        title: "Ordena los pasos para verificar si una noticia tecnológica encontrada en internet es fiable:",
+        items: [
+            "Comprobar la fuente o medio de comunicación que la publica",
+            "Buscar si otros medios serios u oficiales confirman la información",
+            "Verificar la fecha de publicación y la autoría del texto",
+            "Validar si la noticia aporta datos, fuentes contrastables o evidencias"
+        ],
+        correctOrder: [0, 1, 2, 3],
+        explanation: "El filtrado crítico frente a 'fake news' requiere análisis de fuente, contraste externo, actualización temporal y rigor empírico."
+    },
+    {
+        id: 29,
+        block: "Bloque D: Almacenamiento en la Nube",
+        competency: "CD",
+        type: "single",
+        title: "¿Qué ventaja principal ofrece guardar los proyectos escolares en plataformas de almacenamiento en la nube (Cloud storage)?",
+        options: [
+            "Acceso a los documentos desde cualquier dispositivo con internet y copia de seguridad automática",
+            "Aumenta la velocidad de la tarjeta gráfica del ordenador personal",
+            "Hace que la batería de la tableta dure el triple de tiempo",
+            "Evita tener que estudiar para los exámenes de tecnología"
+        ],
+        correct: 0,
+        explanation: "El almacenamiento en la nube favorece la disponibilidad ubiqua del trabajo, el trabajo colaborativo en remoto y la seguridad ante pérdida local."
+    },
+    {
+        id: 30,
+        block: "Bloque D: Plataformas Educativas",
+        competency: "CD",
+        type: "text",
+        title: "¿Qué plataforma virtual institucional utiliza la CARM para la gestión de las aulas virtuales y calificaciones del alumnado?",
+        correctText: "plumier",
+        explanation: "La plataforma de gestión oficial educativa en la Región de Murcia se enmarca en Plumier XXI y sus Aulas Virtuales asociadas."
+    },
+    {
+        id: 31,
+        block: "Bloque D: Ciberseguridad",
+        competency: "CD / CPSAA",
+        type: "single",
+        title: "¿Cuál de las siguientes prácticas garantiza la creación de una contraseña robusta e idónea para tu correo corporativo de educación?",
+        svg: `<svg viewBox="0 0 100 100" width="80">
+            <rect x="25" y="45" width="50" height="40" rx="6" fill="#10b981"/>
+            <path d="M 35 45 L 35 30 A 15 15 0 0 1 65 30 L 65 45" fill="none" stroke="#047857" stroke-width="6"/>
+            <circle cx="50" cy="60" r="5" fill="#ffffff"/>
+        </svg>`,
+        options: [
+            "Utilizar tu fecha de nacimiento o '123456'",
+            "Combinar letras mayúsculas, minúsculas, números y símbolos de más de 10 caracteres",
+            "Usar la palabra 'password' seguida de tu nombre",
+            "Anotar la contraseña en un pósito pegado a la pantalla de la clase"
+        ],
+        correct: 1,
+        explanation: "Las contraseñas seguras deben combinar diversidad de caracteres (mayúsculas, minúsculas, números, símbolos) y longitud adecuada."
+    },
+    {
+        id: 32,
+        block: "Bloque D: Digital Safety (CLIL)",
+        competency: "CD / CPSAA",
+        type: "single",
+        title: "[CLIL] What is 'Phishing' in the context of digital cybersecurity?",
+        options: [
+            "A fraudulent technique used to trick users into revealing personal data or passwords",
+            "A computer programming language for 3D printers",
+            "A physical tool used to strip electric wires",
+            "A clean energy source generated by rivers"
+        ],
+        correct: 0,
+        explanation: "Phishing is a social engineering cyberattack designed to steal sensitive user data like login credentials or banking info."
+    },
+
+    // BLOQUE E: Tecnología Sostenible (33-40)
+    {
+        id: 33,
+        block: "Bloque E: Sostenibilidad",
+        competency: "CC / STEM",
+        type: "single",
+        title: "¿Qué significado tienen las '3 R' de la gestión ambiental de residuos tecnológicos?",
+        svg: `<svg viewBox="0 0 140 120" width="120">
+            <path d="M 70 10 L 100 40 L 85 40 L 85 70 L 55 70 L 55 40 L 40 40 Z" fill="#10b981" transform="rotate(0 70 60)"/>
+            <path d="M 70 10 L 100 40 L 85 40 L 85 70 L 55 70 L 55 40 L 40 40 Z" fill="#10b981" transform="rotate(120 70 60)"/>
+            <path d="M 70 10 L 100 40 L 85 40 L 85 70 L 55 70 L 55 40 L 40 40 Z" fill="#10b981" transform="rotate(240 70 60)"/>
+        </svg>`,
+        options: [
+            "Reparar, Romper, Regaliz",
+            "Reducir, Reutilizar, Reciclar",
+            "Revisar, Rayar, Reemplazar",
+            "Rápido, Robusto, Rentable"
+        ],
+        correct: 1,
+        explanation: "Las 3R establecen la jerarquía de sostenibilidad: Reducir el consumo en origen, Reutilizar productos dados y Reciclar materiales."
+    },
+    {
+        id: 34,
+        block: "Bloque E: Materiales y Sostenibilidad",
+        competency: "STEM",
+        type: "matching",
+        title: "Relaciona el material de taller con su familia de origen:",
+        pairs: [
+            { left: "Contrachapado", right: "Material derivado de la madera (transformado)" },
+            { left: "Polietileno (PET)", right: "Material sintético (Plásticos)" },
+            { left: "Aluminio", right: "Material metálico no férrico" },
+            { left: "Gres / Arcilla", right: "Material cerámico" }
+        ],
+        explanation: "Clasificación de las principales familias de materiales de uso técnico según su origen y naturaleza física."
+    },
+    {
+        id: 35,
+        block: "Bloque E: Obsolescencia Programada",
+        competency: "CC / STEM",
+        type: "single",
+        title: "¿A qué llamamos 'Obsolescencia Programada' en el ámbito de la tecnología?",
+        options: [
+            "A la programación de software mediante inteligencia artificial",
+            "A la planificación deliberada del fin de la vida útil de un producto para forzar su sustitución",
+            "A la actualización gratuita de antivirus informáticos",
+            "Al proceso de reciclado de plásticos de botella"
+        ],
+        correct: 1,
+        explanation: "Es la práctica industrial de calcular el fin de la vida útil de un dispositivo para incentivar el consumo, aumentando residuos electrónicos (e-waste)."
+    },
+    {
+        id: 36,
+        block: "Bloque E: Ciclo de Vida del Producto",
+        competency: "STEM / CC",
+        type: "reorder",
+        title: "Ordena las etapas del Ciclo de Vida de un objeto tecnológico según la economía circular:",
+        items: [
+            "Extracción sostenible de materias primas",
+            "Diseño ecológico y fabricación eficiente",
+            "Distribución, comercialización y uso responsable",
+            "Reciclaje y valorización de componentes al final de su vida útil"
+        ],
+        correctOrder: [0, 1, 2, 3],
+        explanation: "La economía circular contempla la cuna a la cuna: extracción, ecodiseño/fabricación, uso sostenido y reciclaje para reinserción en la cadena."
+    },
+    {
+        id: 37,
+        block: "Bloque E: Entorno Local CARM",
+        competency: "CC / STEM",
+        type: "single",
+        title: "¿Qué sector tecnológico industrial destaca especialmente en la Región de Murcia por su innovación en eficiencia hídrica y energías renovables?",
+        options: [
+            "Tecnología agrotécnica / Riego localizado y Energía solar fotovoltaica",
+            "Fabricación de grandes aviones transoceánicos",
+            "Minería de carbón a cielo abierto",
+            "Industria del caucho para neumáticos de alta velocidad"
+        ],
+        correct: 0,
+        explanation: "La Región de Murcia es referente internacional en la gestión eficiente del agua (agrotecnología, riego de precisión) y generación fotovoltaica."
+    },
+    {
+        id: 38,
+        block: "Bloque E: Sostenibilidad",
+        competency: "CC",
+        type: "text",
+        title: "Escribe el término: ¿Cómo se llama el indicador ambiental que mide la totalidad de gases de efecto invernadero emitidos por un producto?",
+        correctText: "huella de carbono",
+        explanation: "La huella de carbono cuantifica las emisiones de gases de efecto invernadero (en $CO_2$ equivalente) a lo largo del ciclo de vida."
+    },
+    {
+        id: 39,
+        block: "Bloque E: Propiedades de Materiales",
+        competency: "STEM",
+        type: "single",
+        title: "Propiedad mecánica que define la capacidad de un material para soportar golpes o impactos bruscos sin romperse:",
+        options: [
+            "Tenacidad",
+            "Transparencia óptica",
+            "Conductividad eléctrica",
+            "Fusibilidad"
+        ],
+        correct: 0,
+        explanation: "La tenacidad es la resistencia que opone un material a la rotura por choque o impacto mecánico (lo opuesto a la fragilidad)."
+    },
+    {
+        id: 40,
+        block: "Bloque E: Sustainable Technology (CLIL)",
+        competency: "CC / STEM",
+        type: "single",
+        title: "[CLIL] What is the primary environmental goal of electronic waste (e-waste) recycling?",
+        options: [
+            "To recover valuable metals and prevent hazardous chemicals from polluting the environment",
+            "To make smartphones heavier and larger",
+            "To burn plastics in open fires near towns",
+            "To increase electricity costs in homes"
+        ],
+        correct: 0,
+        explanation: "E-waste recycling prevents toxic elements (lead, mercury) from contaminating ecosystems while reclaiming precious metals."
+    }
+];
+
+// App State
+let currentQuestionIndex = 0;
+let userAnswers = {};
+let studentDetails = {};
+
+// Initialize application
+document.addEventListener("DOMContentLoaded", () => {
+    renderQuestionMap();
+});
+
+function startQuiz(event) {
+    event.preventDefault();
+    const name = document.getElementById('student-name').value.trim();
+    const surname = document.getElementById('student-surname').value.trim();
+    const email = document.getElementById('student-email').value.trim();
+    const group = document.getElementById('student-group').value;
+
+    if (!name || !surname || !email || !group) {
+        alert("Por favor, completa todos los campos requeridos.");
+        return;
+    }
+
+    studentDetails = { name, surname, email, group, fullName: `${name} ${surname}` };
+
+    document.getElementById('display-student-name').innerText = studentDetails.fullName;
+    document.getElementById('registration-screen').classList.remove('active');
+    document.getElementById('quiz-screen').classList.add('active');
+
+    renderQuestion(0);
+}
+
+function renderQuestionMap() {
+    const mapContainer = document.getElementById('question-map');
+    mapContainer.innerHTML = '';
+    questionsData.forEach((q, index) => {
+        const btn = document.createElement('button');
+        btn.className = `q-map-btn ${index === 0 ? 'active' : ''}`;
+        btn.id = `map-btn-${index}`;
+        btn.innerText = index + 1;
+        btn.onclick = () => jumpToQuestion(index);
+        mapContainer.appendChild(btn);
+    });
+}
+
+function renderQuestion(index) {
+    currentQuestionIndex = index;
+    const q = questionsData[index];
+    const container = document.getElementById('question-card');
+
+    // Update Progress
+    document.getElementById('current-q-num').innerText = index + 1;
+    const progressPercent = ((index + 1) / questionsData.length) * 100;
+    document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
+
+    // Highlight Map
+    document.querySelectorAll('.q-map-btn').forEach((btn, idx) => {
+        btn.classList.remove('active');
+        if (idx === index) btn.classList.add('active');
+        if (userAnswers[idx] !== undefined) btn.classList.add('answered');
+    });
+
+    // Render Question Header & SVG
+    let html = `
+        <div class="question-header">
+            <span class="question-tag">${q.block}</span>
+            <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">${q.competency}</span>
+        </div>
+        <div class="question-title">${index + 1}. ${q.title}</div>
+    `;
+
+    if (q.svg) {
+        html += `<div class="svg-container">${q.svg}</div>`;
+    }
+
+    // Render Body according to Question Type
+    if (q.type === 'single') {
+        html += `<div class="options-list">`;
+        q.options.forEach((opt, optIdx) => {
+            const isChecked = userAnswers[index] === optIdx ? 'checked' : '';
+            html += `
+                <label class="option-item">
+                    <input type="radio" name="q_${q.id}" value="${optIdx}" ${isChecked} onchange="saveAnswer(${index}, ${optIdx})">
+                    <span>${opt}</span>
+                </label>
+            `;
+        });
+        html += `</div>`;
+    } else if (q.type === 'matching') {
+        html += `<div class="matching-grid">`;
+        q.pairs.forEach((pair, pairIdx) => {
+            const currentVal = (userAnswers[index] && userAnswers[index][pairIdx]) !== undefined ? userAnswers[index][pairIdx] : '';
+            html += `
+                <div><strong>${pair.left}</strong></div>
+                <div>
+                    <select class="form-control" onchange="saveMatchingAnswer(${index}, ${pairIdx}, this.value)">
+                        <option value="">Seleccionar correspondencia...</option>
+                        ${q.pairs.map((p, pIdx) => `
+                            <option value="${pIdx}" ${currentVal == pIdx ? 'selected' : ''}>${p.right}</option>
+                        `).join('')}
+                    </select>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    } else if (q.type === 'reorder') {
+        html += `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Asigna la posición de orden correcta (1º a 4º) para cada etapa:</p>`;
+        html += `<div class="reorder-list">`;
+        q.items.forEach((item, itemIdx) => {
+            const currentVal = (userAnswers[index] && userAnswers[index][itemIdx]) !== undefined ? userAnswers[index][itemIdx] : '';
+            html += `
+                <div class="reorder-item">
+                    <select onchange="saveReorderAnswer(${index}, ${itemIdx}, this.value)">
+                        <option value="">Posición</option>
+                        ${q.items.map((_, pos) => `
+                            <option value="${pos}" ${currentVal == pos ? 'selected' : ''}>${pos + 1}º</option>
+                        `).join('')}
+                    </select>
+                    <span>${item}</span>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    } else if (q.type === 'text') {
+        const currentVal = userAnswers[index] !== undefined ? userAnswers[index] : '';
+        html += `
+            <div class="form-group">
+                <input type="text" class="form-control" value="${currentVal}" placeholder="Escribe tu respuesta aquí..." oninput="saveTextAnswer(${index}, this.value)">
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+
+    // Navigation Buttons Logic
+    document.getElementById('btn-prev').disabled = index === 0;
+    
+    // CRITICAL REQUIREMENT: Final submit button ONLY on question 40 (index === 39)
+    if (index === questionsData.length - 1) {
+        document.getElementById('btn-next').style.display = 'none';
+        document.getElementById('btn-submit').style.display = 'inline-flex';
+    } else {
+        document.getElementById('btn-next').style.display = 'inline-flex';
+        document.getElementById('btn-submit').style.display = 'none';
+    }
+}
+
+function saveAnswer(qIdx, answerVal) {
+    userAnswers[qIdx] = parseInt(answerVal);
+    updateMapStatus(qIdx);
+}
+
+function saveMatchingAnswer(qIdx, pairIdx, value) {
+    if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
+    userAnswers[qIdx][pairIdx] = value !== "" ? parseInt(value) : undefined;
+    updateMapStatus(qIdx);
+}
+
+function saveReorderAnswer(qIdx, itemIdx, value) {
+    if (!userAnswers[qIdx]) userAnswers[qIdx] = {};
+    userAnswers[qIdx][itemIdx] = value !== "" ? parseInt(value) : undefined;
+    updateMapStatus(qIdx);
+}
+
+function saveTextAnswer(qIdx, text) {
+    userAnswers[qIdx] = text.trim();
+    updateMapStatus(qIdx);
+}
+
+function updateMapStatus(qIdx) {
+    const btn = document.getElementById(`map-btn-${qIdx}`);
+    if (btn) btn.classList.add('answered');
+}
+
+function jumpToQuestion(index) {
+    renderQuestion(index);
+}
+
+function navigateQuestion(step) {
+    const newIdx = currentQuestionIndex + step;
+    if (newIdx >= 0 && newIdx < questionsData.length) {
+        renderQuestion(newIdx);
+    }
+}
+
+function submitQuiz() {
+    // Check if unanswered questions remain
+    const unanswered = questionsData.filter((_, idx) => userAnswers[idx] === undefined).length;
+    if (unanswered > 0) {
+        const confirmSubmit = confirm(`Tienes ${unanswered} pregunta(s) sin responder. ¿Estás seguro/a de que deseas finalizar la evaluación?`);
+        if (!confirmSubmit) return;
+    }
+
+    calculateResults();
+}
+
+function calculateResults() {
+    let totalScore = 0;
+    const competencyScores = {
+        "STEM": { total: 0, max: 0, name: "Competencia Matemática, Ciencia, Tecnología e Ingeniería (STEM)" },
+        "CD": { total: 0, max: 0, name: "Competencia Digital (CD)" },
+        "CPSAA": { total: 0, max: 0, name: "Personal, Social y de Aprender a Aprender (CPSAA)" },
+        "CCL": { total: 0, max: 0, name: "Competencia en Comunicación Lingüística (CCL)" },
+        "CE": { total: 0, max: 0, name: "Competencia Emprendedora (CE)" },
+        "CC": { total: 0, max: 0, name: "Competencia Ciudadana (CC)" },
+        "CCEC": { total: 0, max: 0, name: "Conciencia y Expresión Culturales (CCEC)" }
+    };
+
+    let reviewHtml = '';
+
+    questionsData.forEach((q, idx) => {
+        let isCorrect = false;
+        let scoreGiven = 0;
+        const userAns = userAnswers[idx];
+
+        if (q.type === 'single') {
+            if (userAns === q.correct) {
+                isCorrect = true;
+                scoreGiven = 1;
+            }
+        } else if (q.type === 'matching') {
+            let correctCount = 0;
+            if (userAns && typeof userAns === 'object') {
+                q.pairs.forEach((_, pairIdx) => {
+                    if (userAns[pairIdx] === pairIdx) correctCount++;
+                });
+            }
+            scoreGiven = correctCount / q.pairs.length;
+            if (scoreGiven === 1) isCorrect = true;
+        } else if (q.type === 'reorder') {
+            let correctCount = 0;
+            if (userAns && typeof userAns === 'object') {
+                q.items.forEach((_, itemIdx) => {
+                    if (userAns[itemIdx] === q.correctOrder[itemIdx]) correctCount++;
+                });
+            }
+            scoreGiven = correctCount / q.items.length;
+            if (scoreGiven === 1) isCorrect = true;
+        } else if (q.type === 'text') {
+            if (typeof userAns === 'string' && userAns.toLowerCase() === q.correctText.toLowerCase()) {
+                isCorrect = true;
+                scoreGiven = 1;
+            }
+        }
+
+        totalScore += scoreGiven;
+
+        // Associate with primary competency key
+        const compKeys = q.competency.split('/').map(s => s.trim());
+        compKeys.forEach(k => {
+            if (competencyScores[k]) {
+                competencyScores[k].total += scoreGiven;
+                competencyScores[k].max += 1;
+            }
+        });
+
+        // Build Question Review Card
+        let userAnswerFormatted = 'Sin responder';
+        if (q.type === 'single') {
+            userAnswerFormatted = userAns !== undefined ? q.options[userAns] : 'Sin respuesta';
+        } else if (q.type === 'matching') {
+            userAnswerFormatted = userAns ? Object.keys(userAns).map(k => `${q.pairs[k].left} → ${q.pairs[userAns[k]] ? q.pairs[userAns[k]].right : '?'}`).join(', ') : 'Sin respuesta';
+        } else if (q.type === 'reorder') {
+            userAnswerFormatted = userAns ? Object.keys(userAns).map(k => `Etapa ${parseInt(k)+1}: ${parseInt(userAns[k])+1}º`).join(', ') : 'Sin respuesta';
+        } else if (q.type === 'text') {
+            userAnswerFormatted = userAns || 'Sin respuesta';
+        }
+
+        let correctAnswerFormatted = '';
+        if (q.type === 'single') correctAnswerFormatted = q.options[q.correct];
+        else if (q.type === 'matching') correctAnswerFormatted = q.pairs.map(p => `${p.left} → ${p.right}`).join(', ');
+        else if (q.type === 'reorder') correctAnswerFormatted = q.items.map((it, i) => `${i+1}º ${it}`).join(' | ');
+        else if (q.type === 'text') correctAnswerFormatted = q.correctText;
+
+        reviewHtml += `
+            <div class="review-card ${scoreGiven >= 0.8 ? 'correct' : 'incorrect'}">
+                <div class="review-status">${scoreGiven >= 0.8 ? '✓ Correcta / Adecuada' : scoreGiven > 0 ? '⚠ Parcialmente Correcta' : '✗ Incorrecta'}</div>
+                <strong>Pregunta ${idx + 1}: ${q.title}</strong>
+                <div style="margin-top: 8px; font-size: 0.9rem;">
+                    <p><strong>Tu respuesta:</strong> ${userAnswerFormatted}</p>
+                    <p><strong>Respuesta correcta:</strong> ${correctAnswerFormatted}</p>
+                </div>
+                <div class="explanation"><strong>Explicación pedagógica:</strong> ${q.explanation}</div>
+            </div>
+        `;
+    });
+
+    // Final score out of 10
+    const finalGrade = ((totalScore / questionsData.length) * 10).toFixed(1);
+
+    // Populate Printable Header
+    document.getElementById('print-student-name').innerText = studentDetails.fullName;
+    document.getElementById('print-student-email').innerText = studentDetails.email;
+    document.getElementById('print-student-group').innerText = studentDetails.group;
+    document.getElementById('print-date').innerText = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Populate Score Screen
+    document.getElementById('final-score').innerText = `${finalGrade} / 10`;
+    
+    let feedback = "";
+    if (finalGrade >= 9) feedback = "¡Excelente nivel inicial! Demuestras un gran dominio de los conceptos tecnológicos y digitales.";
+    else if (finalGrade >= 7) feedback = "¡Buen trabajo! Posees una base sólida para afrontar el curso de 1.º ESO.";
+    else if (finalGrade >= 5) feedback = "Aprobado aceptable. Se observan conceptos clave afianzados y otros que reforzaremos en el taller.";
+    else feedback = "Nivel inicial necesitado de refuerzo. A lo largo de las unidades afianzaremos estos conocimientos prácticos.";
+
+    document.getElementById('score-feedback').innerText = feedback;
+
+    // Populate Competencies Table
+    const tbody = document.getElementById('competency-tbody');
+    tbody.innerHTML = '';
+    Object.keys(competencyScores).forEach(key => {
+        const item = competencyScores[key];
+        if (item.max > 0) {
+            const percentage = Math.round((item.total / item.max) * 100);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${key}</strong> - ${item.name}</td>
+                <td>${item.max} preguntas evaluadas</td>
+                <td><strong>${percentage}%</strong> (${item.total.toFixed(1)} / ${item.max})</td>
+            `;
+            tbody.appendChild(row);
+        }
+    });
+
+    document.getElementById('review-container').innerHTML = reviewHtml;
+
+    // Switch Screens
+    document.getElementById('quiz-screen').classList.remove('active');
+    document.getElementById('results-screen').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToReview() {
+    document.getElementById('review-section').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
